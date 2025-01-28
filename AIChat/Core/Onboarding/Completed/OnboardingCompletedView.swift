@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingCompletedView: View {
     @Environment(AppState.self) private var root
+    @Environment(UserManager.self) private var userManager
     
     @State private var isCompletingProfileSetup = false
     
@@ -42,9 +43,11 @@ struct OnboardingCompletedView: View {
         isCompletingProfileSetup = true
         
         Task {
-            try await Task.sleep(for: .seconds(3))
-            isCompletingProfileSetup = false
+            let hex = selectedColor.asHex()
+            try await userManager.markOnboardingCompleteForCurrentUser(profileColorHex: hex)
             
+            // dismiss screen
+            isCompletingProfileSetup = false
             root.updateViewState(showTabBar: true)
         }
     }
@@ -52,5 +55,6 @@ struct OnboardingCompletedView: View {
 
 #Preview {
     OnboardingCompletedView(selectedColor: .mint)
+        .environment(UserManager(service: MockUserService()))
         .environment(AppState())
 }
