@@ -10,6 +10,7 @@
 		8313533D2D4308F9006BA2F4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8313533C2D4308F9006BA2F4 /* FirebaseAuth */; };
 		831357982D46A9C100981BE7 /* SignInAppleAsync in Frameworks */ = {isa = PBXBuildFile; productRef = 831357972D46A9C100981BE7 /* SignInAppleAsync */; };
 		832E0E362D482D870018C2BC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 832E0E352D482D870018C2BC /* FirebaseFirestore */; };
+		833BC60D2D4AF95600AF92A7 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 833BC60C2D4AF95600AF92A7 /* Config.xcconfig */; };
 		837AA9FD2D4987FA0080DD4A /* SwiftfulFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 837AA9FC2D4987FA0080DD4A /* SwiftfulFirestore */; };
 		83C42A182D2B348D00A4026F /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 83C42A172D2B348D00A4026F /* SDWebImageSwiftUI */; };
 		83F35C142D368A1400B9101B /* SwiftfulUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 83F35C132D368A1400B9101B /* SwiftfulUtilities */; };
@@ -33,14 +34,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		833BC60C2D4AF95600AF92A7 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		83A2D82E2D26A2F3008C5C31 /* AIChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A2D83E2D26A2F4008C5C31 /* AIChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		83A2D8482D26A2F4008C5C31 /* AIChatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIChatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		833BC60F2D4AF9D500AF92A7 /* Exceptions for "AIChat" folder in "AIChat" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 83A2D82D2D26A2F3008C5C31 /* AIChat */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		83A2D8302D26A2F3008C5C31 /* AIChat */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				833BC60F2D4AF9D500AF92A7 /* Exceptions for "AIChat" folder in "AIChat" target */,
+			);
 			path = AIChat;
 			sourceTree = "<group>";
 		};
@@ -97,6 +112,7 @@
 		83A2D8252D26A2F3008C5C31 = {
 			isa = PBXGroup;
 			children = (
+				833BC60C2D4AF95600AF92A7 /* Config.xcconfig */,
 				83A2D8302D26A2F3008C5C31 /* AIChat */,
 				83A2D8412D26A2F4008C5C31 /* AIChatTests */,
 				83A2D84B2D26A2F4008C5C31 /* AIChatUITests */,
@@ -249,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				833BC60D2D4AF95600AF92A7 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +468,7 @@
 		};
 		83A2D8532D26A2F4008C5C31 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 833BC60C2D4AF95600AF92A7 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -463,6 +481,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIChat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -490,6 +509,7 @@
 		};
 		83A2D8542D26A2F4008C5C31 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 833BC60C2D4AF95600AF92A7 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -502,6 +522,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AIChat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
