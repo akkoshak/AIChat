@@ -10,6 +10,8 @@ import SwiftUI
 struct CreateAvatarView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AIManager.self) private var aiManager
+    @Environment(AuthManager.self) private var authManager
+    @Environment(AvatarManager.self) private var avatarManager
     
     @State private var avatarName: String = ""
     @State private var characterOption: CharacterOption = .default
@@ -18,6 +20,7 @@ struct CreateAvatarView: View {
     
     @State private var isGenerating: Bool = false
     @State private var generatedImage: UIImage?
+    @State private var showAlert: AnyAppAlert?
     
     @State private var isSaving: Bool = false
     
@@ -35,6 +38,7 @@ struct CreateAvatarView: View {
                     backButton
                 }
             }
+            .showCustomAlert(alert: $showAlert)
         }
     }
     
@@ -163,11 +167,33 @@ struct CreateAvatarView: View {
     }
     
     private func onSavePressed() {
+        guard let generatedImage else { return }
+        
         isSaving = true
         
         Task {
-            try? await Task.sleep(for: .seconds(3))
-            dismiss()
+            do {
+                try TextValidationHelper.checkIfTextIsValid(text: avatarName, minimumCharactersCount: 3)
+                let uid = try authManager.getAuthId()
+                
+                let avatar = AvatarModel(
+                    avatarId: UUID().uuidString,
+                    name: avatarName,
+                    characterOption: characterOption,
+                    characterAction: characterAction,
+                    characterLocation: characterLocation,
+                    profileImageName: nil,
+                    authorId: uid,
+                    dateCreated: .now
+                )
+                
+                try await avatarManager.createAvatar(avatar: avatar, image: generatedImage)
+                
+                dismiss()
+            } catch {
+                showAlert = AnyAppAlert(error: error)
+            }
+            
             isSaving = false
         }
     }
@@ -176,4 +202,6 @@ struct CreateAvatarView: View {
 #Preview {
     CreateAvatarView()
         .environment(AIManager(service: MockAIService()))
+        .environment(AvatarManager(service: MockAvatarService()))
+        .environment(AuthManager(service: MockAuthService(user: .mock())))
 }

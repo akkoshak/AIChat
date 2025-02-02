@@ -14,6 +14,7 @@
 		837AA9FD2D4987FA0080DD4A /* SwiftfulFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 837AA9FC2D4987FA0080DD4A /* SwiftfulFirestore */; };
 		83C42A182D2B348D00A4026F /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 83C42A172D2B348D00A4026F /* SDWebImageSwiftUI */; };
 		83E125F02D50050100A74C50 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 83E125EF2D50050100A74C50 /* OpenAI */; };
+		83E126052D502E4700A74C50 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 83E126042D502E4700A74C50 /* FirebaseStorage */; };
 		83F35C142D368A1400B9101B /* SwiftfulUtilities in Frameworks */ = {isa = PBXBuildFile; productRef = 83F35C132D368A1400B9101B /* SwiftfulUtilities */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 				837AA9FD2D4987FA0080DD4A /* SwiftfulFirestore in Frameworks */,
 				8313533D2D4308F9006BA2F4 /* FirebaseAuth in Frameworks */,
 				83E125F02D50050100A74C50 /* OpenAI in Frameworks */,
+				83E126052D502E4700A74C50 /* FirebaseStorage in Frameworks */,
 				832E0E362D482D870018C2BC /* FirebaseFirestore in Frameworks */,
 				83F35C142D368A1400B9101B /* SwiftfulUtilities in Frameworks */,
 			);
@@ -161,6 +163,7 @@
 				832E0E352D482D870018C2BC /* FirebaseFirestore */,
 				837AA9FC2D4987FA0080DD4A /* SwiftfulFirestore */,
 				83E125EF2D50050100A74C50 /* OpenAI */,
+				83E126042D502E4700A74C50 /* FirebaseStorage */,
 			);
 			productName = AIChat;
 			productReference = 83A2D82E2D26A2F3008C5C31 /* AIChat.app */;
@@ -746,6 +749,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 83E125EE2D50050100A74C50 /* XCRemoteSwiftPackageReference "OpenAI" */;
 			productName = OpenAI;
+		};
+		83E126042D502E4700A74C50 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8313533B2D4308F9006BA2F4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 		83F35C132D368A1400B9101B /* SwiftfulUtilities */ = {
 			isa = XCSwiftPackageProductDependency;

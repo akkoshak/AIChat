@@ -9,9 +9,7 @@ import Foundation
 
 struct TextValidationHelper {
     
-    static func checkIfTextIsValid(text: String) throws {
-        let minimumCharactersCount = 3
-        
+    static func checkIfTextIsValid(text: String, minimumCharactersCount: Int = 4) throws {
         guard text.count >= minimumCharactersCount else {
             throw TextValidationError.notEnoughCharacters(min: minimumCharactersCount)
         }
