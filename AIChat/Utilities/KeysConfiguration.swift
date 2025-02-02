@@ -1,5 +1,5 @@
 //
-//  Configuration.swift
+//  KeysConfiguration.swift
 //  AIChat
 //
 //  Created by Abdulkarim Koshak on 1/30/25.
@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum Configuration {
+enum KeysConfiguration {
     enum Error: Swift.Error {
         case missingKey, invalidValue
     }
     
     static func value<T>(for key: String) throws -> T where T: LosslessStringConvertible {
-        guard let object = Bundle.main.object(forInfoDictionaryKey:key) else {
+        guard let object = Bundle.main.object(forInfoDictionaryKey: key) else {
             throw Error.missingKey
         }
         
