@@ -1,5 +1,5 @@
 //
-//  AvatarManager.swift
+//  MockAvatarService.swift
 //  AIChat
 //
 //  Created by Abdulkarim Koshak on 2/3/25.
@@ -7,31 +7,29 @@
 
 import SwiftUI
 
-@MainActor
-@Observable class AvatarManager {
-    private let service: AvatarService
-    
-    init(service: AvatarService) {
-        self.service = service
-    }
+struct MockAvatarService: AvatarService {
     
     func createAvatar(avatar: AvatarModel, image: UIImage) async throws {
-        try await service.createAvatar(avatar: avatar, image: image)
+        
     }
     
     func getFeaturedAvatars() async throws -> [AvatarModel] {
-        try await service.getFeaturedAvatars()
+        try await Task.sleep(for: .seconds(1))
+        return AvatarModel.mocks.shuffled()
     }
     
     func getPopularAvatars() async throws -> [AvatarModel] {
-        try await service.getPopularAvatars()
+        try await Task.sleep(for: .seconds(2))
+        return AvatarModel.mocks.shuffled()
     }
     
     func getAvatarsForCategory(category: CharacterOption) async throws -> [AvatarModel] {
-        try await service.getAvatarsForCategory(category: category)
+        try await Task.sleep(for: .seconds(2))
+        return AvatarModel.mocks.shuffled()
     }
     
     func getAvatarsForAuthor(userId: String) async throws -> [AvatarModel] {
-        try await service.getAvatarsForAuthor(userId: userId)
+        try await Task.sleep(for: .seconds(2))
+        return AvatarModel.mocks.shuffled()
     }
 }
