@@ -16,7 +16,8 @@ struct ProfileView: View {
     @State private var showCreateAvatarView = false
     @State private var currentUser: UserModel?
     @State private var myAvatars: [AvatarModel] = []
-    @State private var isLoading = true
+    @State private var isLoading: Bool = true
+    @State private var showAlert: AnyAppAlert?
     
     @State private var path: [NavigationPathOption] = []
     
@@ -28,6 +29,7 @@ struct ProfileView: View {
             }
             .navigationTitle("Profile")
             .navigationDestinationForCoreModule(path: $path)
+            .showCustomAlert(alert: $showAlert)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     settingsButton
@@ -144,7 +146,16 @@ struct ProfileView: View {
     
     private func onDeleteAvatar(indexSet: IndexSet) {
         guard let index = indexSet.first else { return }
-        myAvatars.remove(at: index)
+        let avatar = myAvatars[index]
+        
+        Task {
+            do {
+                try await avatarManager.removeAuthorIdFromAvatar(avatarId: avatar.id)
+                myAvatars.remove(at: index)
+            } catch {
+                showAlert = AnyAppAlert(title: "Unable to delete avatar", subtitle: "Please try again.")
+            }
+        }
     }
 }
 
