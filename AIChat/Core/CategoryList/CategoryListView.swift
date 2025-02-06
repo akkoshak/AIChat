@@ -29,10 +29,17 @@ struct CategoryListView: View {
             )
             .removeListRowFormatting()
             
-            if avatars.isEmpty && isLoading {
+            if isLoading {
                 ProgressView()
                     .padding(40)
                     .frame(maxWidth: .infinity)
+                    .listRowSeparator(.hidden)
+                    .removeListRowFormatting()
+            } else if avatars.isEmpty {
+                Text("No avatars found 😭")
+                    .frame(maxWidth: .infinity)
+                    .padding(40)
+                    .foregroundStyle(.secondary)
                     .listRowSeparator(.hidden)
                     .removeListRowFormatting()
             } else {
@@ -72,7 +79,22 @@ struct CategoryListView: View {
     }
 }
 
-#Preview {
+#Preview("Has Data") {
     CategoryListView(path: .constant([]))
         .environment(AvatarManager(service: MockAvatarService()))
+}
+
+#Preview("No Data") {
+    CategoryListView(path: .constant([]))
+        .environment(AvatarManager(service: MockAvatarService(avatars: [])))
+}
+
+#Preview("Slow Loading") {
+    CategoryListView(path: .constant([]))
+        .environment(AvatarManager(service: MockAvatarService(delay: 10)))
+}
+
+#Preview("Error Loading") {
+    CategoryListView(path: .constant([]))
+        .environment(AvatarManager(service: MockAvatarService(delay: 5, showError: true)))
 }
