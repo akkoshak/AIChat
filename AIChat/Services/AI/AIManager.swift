@@ -18,4 +18,8 @@ import SwiftUI
     func generateImage(input: String) async throws -> UIImage {
         try await service.generateImage(input: input)
     }
+    
+    func generateText(chats: [AIChatModel]) async throws -> AIChatModel {
+        try await service.generateText(chats: chats)
+    }
 }
