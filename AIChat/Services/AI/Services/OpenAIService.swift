@@ -59,7 +59,7 @@ struct OpenAIService: AIService {
     }
 }
 
-struct AIChatModel {
+struct AIChatModel: Codable {
     let role: AIChatRole
     let message: String
     
@@ -86,7 +86,7 @@ struct AIChatModel {
     }
 }
 
-enum AIChatRole {
+enum AIChatRole: String, Codable {
     case system, developer, user, assistant, tool
     
     init(role: ChatQuery.ChatCompletionMessageParam.Role) {
