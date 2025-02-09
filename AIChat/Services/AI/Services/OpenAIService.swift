@@ -8,8 +8,12 @@
 import OpenAI
 import SwiftUI
 
-typealias ChatContent = ChatQuery.ChatCompletionMessageParam.UserMessageParam.Content.VisionContent
-typealias ChatText = ChatQuery.ChatCompletionMessageParam.UserMessageParam.Content.VisionContent.ChatCompletionContentPartTextParam
+private typealias ChatCompletion = ChatQuery.ChatCompletionMessageParam
+private typealias SystemMessage = ChatQuery.ChatCompletionMessageParam.SystemMessageParam
+private typealias DeveloperMessage = ChatQuery.ChatCompletionMessageParam.DeveloperMessageParam
+private typealias UserMessage = ChatQuery.ChatCompletionMessageParam.UserMessageParam
+private typealias UserTextContent = ChatQuery.ChatCompletionMessageParam.UserMessageParam.Content
+private typealias AssistantMessage = ChatQuery.ChatCompletionMessageParam.AssistantMessageParam
 
 struct OpenAIService: AIService {
     var openAI: OpenAI {
@@ -78,11 +82,19 @@ struct AIChatModel: Codable {
         }
     }
     
-    func toOpenAIModel() -> ChatQuery.ChatCompletionMessageParam? {
-        ChatQuery.ChatCompletionMessageParam(
-            role: role.openAIRole,
-            content: [ChatContent.chatCompletionContentPartTextParam(ChatText(text: message))]
-        )
+    fileprivate func toOpenAIModel() -> ChatCompletion? {
+        switch role {
+        case .system:
+            return ChatCompletion.system(SystemMessage(content: message))
+        case .developer:
+            return ChatCompletion.developer(DeveloperMessage(content: message))
+        case .user:
+            return ChatCompletion.user(UserMessage(content: UserTextContent(string: message)))
+        case .assistant:
+            return ChatCompletion.assistant(AssistantMessage(content: message))
+        case .tool:
+            return nil
+        }
     }
 }
 
