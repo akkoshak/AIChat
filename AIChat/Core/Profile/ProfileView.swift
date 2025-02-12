@@ -141,7 +141,7 @@ struct ProfileView: View {
     }
     
     private func onAvatarPressed(avatar: AvatarModel) {
-        path.append(.chat(avatarId: avatar.avatarId))
+        path.append(.chat(avatarId: avatar.avatarId, chat: nil))
     }
     
     private func onDeleteAvatar(indexSet: IndexSet) {
