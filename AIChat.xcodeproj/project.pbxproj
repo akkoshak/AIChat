@@ -689,8 +689,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftfulThinking/SwiftfulFirestore.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.2;
+				kind = exactVersion;
+				version = 11.0.1;
 			};
 		};
 		83C42A162D2B348D00A4026F /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {

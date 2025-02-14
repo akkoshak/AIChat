@@ -13,6 +13,7 @@ import SwiftUI
     private let local: LocalUserPersistence
     
     private(set) var currentUser: UserModel?
+    private var currentUserListener: ListenerRegistration?
     
     init(services: UserServices) {
         self.remote = services.remote
@@ -28,9 +29,13 @@ import SwiftUI
     }
     
     private func addCurrentUserListener(userId: String) {
+        currentUserListener?.remove()
+        
         Task {
             do {
-                for try await value in remote.streamUser(userId: userId) {
+                for try await value in remote.streamUser(userId: userId, onListenerConfigured: { listener in
+                    self.currentUserListener = listener
+                }) {
                     self.currentUser = value
                     self.saveCurrentUserLocally()
                     print("Successfully listened to user: \(value.userId)")
@@ -58,6 +63,8 @@ import SwiftUI
     }
     
     func signOut() {
+        currentUserListener?.remove()
+        currentUserListener = nil
         currentUser = nil
     }
     

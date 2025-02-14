@@ -27,7 +27,7 @@ struct ChatView: View {
     @State private var showChatSettings: AnyAppAlert?
     @State private var showProfileModal: Bool = false
     @State private var isGeneratingResponse: Bool = false
-    @State private var messageListenerTask: Task<Void, Error>?
+    @State private var messageListener: AnyListener?
     
     var avatarId: String = AvatarModel.mock.avatarId
     
@@ -71,8 +71,7 @@ struct ChatView: View {
             loadCurrentUser()
         }
         .onDisappear {
-            messageListenerTask?.cancel()
-            messageListenerTask = nil
+            messageListener?.listener.remove()
         }
     }
     
@@ -109,18 +108,18 @@ struct ChatView: View {
     }
     
     private func listenForChatMessages() async {
-        messageListenerTask?.cancel()
-        messageListenerTask = Task {
-            do {
-                let chatId = try getChatId()
-                
-                for try await value in chatManager.streamChatMessages(chatId: chatId) {
-                    chatMessages = value.sortedByKeyPath(keyPath: \.dateCreatedCalculated, ascending: true)
-                    scrollPosition = chatMessages.last?.id
-                }
-            } catch {
-                print("Failed to attach chat message listener.")
+        do {
+            let chatId = try getChatId()
+            
+            for try await value in chatManager.streamChatMessages(chatId: chatId, onListenerConfigured: { listener in
+                messageListener?.listener.remove()
+                messageListener = listener
+            }) {
+                chatMessages = value.sortedByKeyPath(keyPath: \.dateCreatedCalculated, ascending: true)
+                scrollPosition = chatMessages.last?.id
             }
+        } catch {
+            print("Failed to attach chat message listener.")
         }
     }
     

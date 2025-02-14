@@ -8,6 +8,12 @@
 import FirebaseFirestore
 import SwiftfulFirestore
 
+typealias ListenerRegistration = FirebaseFirestore.ListenerRegistration
+
+struct AnyListener: @unchecked Sendable {
+    let listener: ListenerRegistration
+}
+
 struct FirebaseUserService: RemoteUserService {
     var collection: CollectionReference {
         Firestore.firestore().collection("users")
@@ -24,8 +30,8 @@ struct FirebaseUserService: RemoteUserService {
         ])
     }
     
-    func streamUser(userId: String) -> AsyncThrowingStream<UserModel, Error> {
-        collection.streamDocument(id: userId)
+    func streamUser(userId: String, onListenerConfigured: @escaping (ListenerRegistration) -> Void) -> AsyncThrowingStream<UserModel, Error> {
+        collection.streamDocument(id: userId, onListenerConfigured: onListenerConfigured)
     }
     
     func deleteUser(userId: String) async throws {

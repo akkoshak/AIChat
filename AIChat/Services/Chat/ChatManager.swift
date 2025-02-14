@@ -35,8 +35,8 @@ import SwiftUI
         try await service.getLastChatMessage(chatId: chatId)
     }
     
-    func streamChatMessages(chatId: String) -> AsyncThrowingStream<[ChatMessageModel], Error> {
-        service.streamChatMessages(chatId: chatId)
+    func streamChatMessages(chatId: String, onListenerConfigured: @escaping (AnyListener) -> Void) -> AsyncThrowingStream<[ChatMessageModel], Error> {
+        service.streamChatMessages(chatId: chatId, onListenerConfigured: onListenerConfigured)
     }
     
     func deleteChat(chatId: String) async throws {
