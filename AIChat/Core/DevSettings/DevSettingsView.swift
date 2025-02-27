@@ -83,16 +83,8 @@ struct DevSettingsView: View {
             
             Spacer(minLength: 4)
             
-            if let value = item.value as? String {
+            if let value = String.convertToString(item.value) {
                 Text(value)
-            } else if let value = item.value as? Bool {
-                Text(value.description)
-            } else if let value = item.value as? Int {
-                Text("\(value)")
-            } else if let value = item.value as? Double {
-                Text("\(value)")
-            } else if let value = item.value as? Date {
-                Text(value.formatted())
             } else {
                 Text("N/A")
             }
