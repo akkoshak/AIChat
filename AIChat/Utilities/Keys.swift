@@ -16,4 +16,13 @@ struct Keys {
             return ""
         }
     }()
+    
+    static let mixpanelToken: String = {
+        do {
+            return try KeysConfiguration.value(for: "MIXPANEL_TOKEN")
+        } catch {
+            print("Failed to load API key: \(error)")
+            return ""
+        }
+    }()
 }
