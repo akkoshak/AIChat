@@ -55,7 +55,10 @@ struct Dependencies {
             avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             chatManager = ChatManager(service: FirebaseChatService())
             logManager = LogManager(services: [
-                ConsoleService(), FirebaseAnalyticsService(), MixpanelService(token: Keys.mixpanelToken, loggingEnabled: true)
+                ConsoleService(),
+                FirebaseAnalyticsService(),
+                MixpanelService(token: Keys.mixpanelToken, loggingEnabled: true),
+                FirebaseCrashlyticsService()
             ])
         case .prod:
             authManager = AuthManager(service: FirebaseAuthService())
@@ -64,7 +67,9 @@ struct Dependencies {
             avatarManager = AvatarManager(service: FirebaseAvatarService(), local: SwiftDataLocalAvatarPersistence())
             chatManager = ChatManager(service: FirebaseChatService())
             logManager = LogManager(services: [
-                FirebaseAnalyticsService(), MixpanelService(token: Keys.mixpanelToken)
+                FirebaseAnalyticsService(),
+                MixpanelService(token: Keys.mixpanelToken),
+                FirebaseCrashlyticsService()
             ])
         }
     }

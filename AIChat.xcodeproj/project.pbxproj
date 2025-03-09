@@ -13,6 +13,7 @@
 		832E0E362D482D870018C2BC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 832E0E352D482D870018C2BC /* FirebaseFirestore */; };
 		833BC60D2D4AF95600AF92A7 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 833BC60C2D4AF95600AF92A7 /* Config.xcconfig */; };
 		837AA9FD2D4987FA0080DD4A /* SwiftfulFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 837AA9FC2D4987FA0080DD4A /* SwiftfulFirestore */; };
+		839AEF152D7D1D3D00BB141A /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 839AEF142D7D1D3D00BB141A /* FirebaseCrashlytics */; };
 		83A500102D711542002A2D81 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 83A5000F2D711542002A2D81 /* FirebaseAnalytics */; };
 		83C42A182D2B348D00A4026F /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 83C42A172D2B348D00A4026F /* SDWebImageSwiftUI */; };
 		83E125F02D50050100A74C50 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 83E125EF2D50050100A74C50 /* OpenAI */; };
@@ -85,6 +86,7 @@
 				837AA9FD2D4987FA0080DD4A /* SwiftfulFirestore in Frameworks */,
 				8313533D2D4308F9006BA2F4 /* FirebaseAuth in Frameworks */,
 				83E125F02D50050100A74C50 /* OpenAI in Frameworks */,
+				839AEF152D7D1D3D00BB141A /* FirebaseCrashlytics in Frameworks */,
 				83E126052D502E4700A74C50 /* FirebaseStorage in Frameworks */,
 				8311B2282D7B952C00276BB9 /* Mixpanel in Frameworks */,
 				832E0E362D482D870018C2BC /* FirebaseFirestore in Frameworks */,
@@ -150,6 +152,7 @@
 				83A2D82B2D26A2F3008C5C31 /* Frameworks */,
 				83A2D82C2D26A2F3008C5C31 /* Resources */,
 				8349D3D32D27414500084F8C /* ShellScript */,
+				839AEF162D7D1EA200BB141A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -170,6 +173,7 @@
 				83E126042D502E4700A74C50 /* FirebaseStorage */,
 				83A5000F2D711542002A2D81 /* FirebaseAnalytics */,
 				8311B2272D7B952C00276BB9 /* Mixpanel */,
+				839AEF142D7D1D3D00BB141A /* FirebaseCrashlytics */,
 			);
 			productName = AIChat;
 			productReference = 83A2D82E2D26A2F3008C5C31 /* AIChat.app */;
@@ -318,6 +322,29 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -z \"$CI\" ]]; then\n    if [[ \"$(uname -m)\" == arm64 ]]; then\n        export PATH=\"/opt/homebrew/bin:$PATH\"\n    fi\n\n    # Check if running in a SwiftUI preview\n    if [ \"$XCODE_RUNNING_FOR_PREVIEWS\" != \"1\" ]; then\n        if which swiftlint > /dev/null; then\n            swiftlint # Uncomment if you want to auto-fix: swiftlint --fix &&\n        else\n            echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n        fi\n    fi\nelse \n    # Running Xcode Cloud\n    echo \"Running in Xcode Cloud. Skipping SwiftLint.\"\nfi\n";
 			showEnvVarsInLog = 0;
+		};
+		839AEF162D7D1EA200BB141A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n  GOOGLE_SERVICE_INFO_PLIST=\"${PROJECT_DIR}/AIChat/GoogleServicePLists/GoogleService-Info-Dev.plist\"\nelif [ \"${CONFIGURATION}\" == \"Mock\" ]; then\n  echo \"Skipping Crashlytics upload for Mock configuration.\"\n  exit 0  # Use `exit 0` if `return` does not work in your environment\nelif [ \"${CONFIGURATION}\" == \"Release\" ]; then\n  GOOGLE_SERVICE_INFO_PLIST=\"${PROJECT_DIR}/AIChat/GoogleServicePLists/GoogleService-Info-Prod.plist\"\nelse\n  echo \"No matching build configuration found for GoogleService-Info.plist!\"\n  exit 1\nfi\n\n# Run the Crashlytics script with the selected plist file\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" -gsp \"${GOOGLE_SERVICE_INFO_PLIST}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -491,6 +518,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"AIChat/Preview Content\"";
 				DEVELOPMENT_TEAM = 978K845C66;
 				ENABLE_PREVIEWS = YES;
@@ -510,6 +538,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.akoshak.AIChat.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -532,13 +561,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"AIChat/Preview Content\"";
 				DEVELOPMENT_TEAM = 978K845C66;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIChat/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat - Dev";
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -551,6 +581,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.akoshak.AIChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -710,13 +741,14 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"AIChat/Preview Content\"";
 				DEVELOPMENT_TEAM = 978K845C66;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIChat/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat - Dev";
+				INFOPLIST_KEY_CFBundleDisplayName = "AI Chat - Mock";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -729,6 +761,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.akoshak.AIChat.mock;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -906,6 +939,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 837AA9FB2D4987FA0080DD4A /* XCRemoteSwiftPackageReference "SwiftfulFirestore" */;
 			productName = SwiftfulFirestore;
+		};
+		839AEF142D7D1D3D00BB141A /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8313533B2D4308F9006BA2F4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		83A5000F2D711542002A2D81 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
