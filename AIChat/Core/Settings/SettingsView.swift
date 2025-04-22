@@ -14,6 +14,7 @@ struct SettingsView: View {
     @Environment(AvatarManager.self) private var avatarManager
     @Environment(ChatManager.self) private var chatManager
     @Environment(AppState.self) private var appState
+    @Environment(LogManager.self) private var logManager
     
     @State private var isPremium = false
     @State private var isAnonymousUser = false
@@ -38,6 +39,7 @@ struct SettingsView: View {
                 setAnonymousAccountStatus()
             }
             .showCustomAlert(alert: $showAlert)
+            .screenAppearAnalytics(name: "SettingsView")
         }
     }
     
@@ -137,15 +139,61 @@ struct SettingsView: View {
         isAnonymousUser = authManager.auth?.isAnonymous == true
     }
     
+    enum Event: LoggableEvent {
+        case signOutStart
+        case signOutSuccess
+        case signOutFail(error: Error)
+        case deleteAccountStart
+        case deleteAccountStartConfirm
+        case deleteAccountSuccess
+        case deleteAccountFail(error: Error)
+        case createAccountPressed
+        
+        var eventName: String {
+            switch self {
+            case .signOutStart:                   return "SettingsView_SignOut_Start"
+            case .signOutSuccess:                 return "SettingsView_SignOut_Success"
+            case .signOutFail:                    return "SettingsView_SignOut_Fail"
+            case .deleteAccountStart:             return "SettingsView_DeleteAccount_Start"
+            case .deleteAccountStartConfirm:      return "SettingsView_DeleteAccount_StartConfirm"
+            case .deleteAccountSuccess:           return "SettingsView_DeleteAccount_Success"
+            case .deleteAccountFail:              return "SettingsView_DeleteAccount_Fail"
+            case .createAccountPressed:           return "SettingsView_CreateAccount_Pressed"
+            }
+        }
+        
+        var parameters: [String: Any]? {
+            switch self {
+            case .signOutFail(error: let error), .deleteAccountFail(error: let error):
+                return error.eventParameters
+            default:
+                return nil
+            }
+        }
+        
+        var type: LogType {
+            switch self {
+            case .signOutFail, .deleteAccountFail:
+                return .severe
+            default:
+                return .analytic
+            }
+        }
+    }
+    
     func onSignOutPressed() {
+        logManager.trackEvent(event: Event.signOutStart)
+        
         Task {
             do {
                 try authManager.signOut()
                 userManager.signOut()
+                logManager.trackEvent(event: Event.signOutSuccess)
                 
                 await dismissScreen()
             } catch {
                 showAlert = AnyAppAlert(error: error)
+                logManager.trackEvent(event: Event.signOutFail(error: error))
             }
         }
     }
@@ -157,6 +205,8 @@ struct SettingsView: View {
     }
     
     func onDeleteAccountPressed() {
+        logManager.trackEvent(event: Event.deleteAccountStart)
+        
         showAlert = AnyAppAlert(
             title: "Delete Account",
             subtitle: "Are you sure you want to delete your account? This will permanently erase your account.",
@@ -171,6 +221,8 @@ struct SettingsView: View {
     }
     
     private func onDeleteAccountConfirmed() {
+        logManager.trackEvent(event: Event.deleteAccountStartConfirm)
+        
         Task {
             do {
                 let uid = try authManager.getAuthId()
@@ -180,16 +232,20 @@ struct SettingsView: View {
                 async let deleteChats: () = chatManager.deleteAllChatsForUser(userId: uid)
                 
                 let (_, _, _, _) = await (try deleteAuth, try deleteUser, try deleteAvatars, try deleteChats)
+                logManager.deleteUserProfile()
+                logManager.trackEvent(event: Event.deleteAccountSuccess)
                 
                 await dismissScreen()
             } catch {
                 showAlert = AnyAppAlert(error: error)
+                logManager.trackEvent(event: Event.deleteAccountFail(error: error))
             }
         }
     }
     
     func onCreateAccountPressed() {
         showCreateAccountView = true
+        logManager.trackEvent(event: Event.createAccountPressed)
     }
 }
 

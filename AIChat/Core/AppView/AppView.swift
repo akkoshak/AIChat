@@ -25,7 +25,6 @@ struct AppView: View {
             }
         )
         .environment(appState)
-        .screenAppearAnalytics(name: "AppView")
         .task {
             await checkUserStatus()
         }
